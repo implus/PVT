@@ -25,7 +25,8 @@ from samplers import RASampler
 import pvt
 import utils
 import collections
-
+import warnings
+warnings.filterwarnings("ignore", category=UserWarning)
 
 def get_args_parser():
     parser = argparse.ArgumentParser('PVT training and evaluation script', add_help=False)
@@ -158,7 +159,7 @@ def get_args_parser():
                         help='start epoch')
     parser.add_argument('--eval', action='store_true', help='Perform evaluation only')
     parser.add_argument('--dist-eval', action='store_true', default=False, help='Enabling distributed evaluation')
-    parser.add_argument('--num_workers', default=10, type=int)
+    parser.add_argument('--num_workers', default=32, type=int)
     parser.add_argument('--pin-mem', action='store_true',
                         help='Pin CPU memory in DataLoader for more efficient (sometimes) transfer to GPU.')
     parser.add_argument('--no-pin-mem', action='store_false', dest='pin_mem',
@@ -188,8 +189,10 @@ def main(args):
 
     cudnn.benchmark = True
 
+    print('dataset build init....')
     dataset_train, args.nb_classes = build_dataset(is_train=True, args=args)
     dataset_val, _ = build_dataset(is_train=False, args=args)
+    print('dataset build finish....')
 
     if True:  # args.distributed:
         num_tasks = utils.get_world_size()
@@ -220,6 +223,8 @@ def main(args):
     else:
         sampler_train = torch.utils.data.RandomSampler(dataset_train)
         sampler_val = torch.utils.data.SequentialSampler(dataset_val)
+
+    print('data loader init....')
 
     data_loader_train = torch.utils.data.DataLoader(
         dataset_train, sampler=sampler_train,

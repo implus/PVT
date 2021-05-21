@@ -1,0 +1,4 @@
+./dist_train.sh pvt_small 8 ./checkpoints/pvt_small --data-path /opt/data/common/datasets/ImageNet/ILSVRC2012
+./dist_train.sh pvt_small 8 ./checkpoints/pvt_small_try2 --data-path /opt/data/common/datasets/ImageNet/ILSVRC2012
+./dist_train.sh pvt_small_sk2ffn 8 ./checkpoints/pvt_small_sk2ffn --data-path /opt/data/common/datasets/ImageNet/ILSVRC2012
+./dist_train.sh pvt_small_sk2lnffn 8 ./checkpoints/pvt_small_sk2lnffn --data-path /opt/data/common/datasets/ImageNet/ILSVRC2012
